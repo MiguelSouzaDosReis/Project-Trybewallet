@@ -1,7 +1,15 @@
-// para validar email peguei do video https://www.youtube.com/watch?v=nRHCoOVSu5k&t=545s e
+// para validar email utilizei o repositório do AndreLuiiz
+// https://github.com/tryber/sd-015-b-project-trybewallet/pull/107/commits/22551509a28b4985d820fea9b610cac94a5df123
+// e para enteder melhor o codigio dele utilizei esse site:
+// https://stackoverflow.com/questions/49209362/what-is-the-meaning-of-s-s-gm-in-javascript
+// para desativar o botão utilizei o repositório do Matheus Hammarstrom
+// https://github.com/tryber/sd-015-b-project-trybewallet/pull/115/commits/be103823bd3346de8f97516ca345438f5f774d03
 
 import React from 'react';
+import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
+import PropTypes from 'prop-types';
+import { setEmail } from '../actions/index';
 
 class Login extends React.Component {
   constructor() {
@@ -10,40 +18,45 @@ class Login extends React.Component {
       botoaDesabilidado: true,
       email: '',
       senha: '',
-      redirecionar: false,
+      redireciona: false,
     };
     this.HabilitarOBotao = this.HabilitarOBotao.bind(this);
     this.Redirecionar = this.Redirecionar.bind(this);
   }
 
   Redirecionar() {
-    this.setState({ redirecionar: true });
+    setEmail();
+    const { setUserEmail } = this.props;
+    const { email } = this.state;
+    setUserEmail(email);
+    this.setState({ redireciona: true });
   }
 
   HabilitarOBotao(event) {
     const { email, senha } = this.state;
     const { name, value } = event.target;
-    const validaidon = /^([a-zA-Z0-9._]+)@[a-zA-Z0-9]+.([c-o]+)/;
+    const validacaoDoEmail = /\S+@\S+\.\S+/;
     const minimoSenha = 5;
+    const emaiiValidado = email.match(validacaoDoEmail);
+    const senhavalidada = senha.length >= minimoSenha;
     this.setState({ [name]: value });
-    if (email.match(validaidon) && senha.length >= minimoSenha) {
-      this.setState({
-        botoaDesabilidado: false,
-      });
-    }
+    const validacao = emaiiValidado && senhavalidada;
+    this.setState({
+      botoaDesabilidado: !validacao,
+    });
   }
 
   render() {
-    const { email, senha, botoaDesabilidado, redirecionar } = this.state;
+    const { email, senha, botoaDesabilidado, redireciona } = this.state;
     return (
       <form>
-        {redirecionar && <Redirect to="/carteira" />}
+        {redireciona && <Redirect to="/carteira" />}
         <input
           name="email"
           value={ email }
           placeholder="email"
           onChange={ this.HabilitarOBotao }
-          testid="email-input"
+          data-testid="email-input"
           type="email"
         />
         <input
@@ -66,5 +79,12 @@ class Login extends React.Component {
     );
   }
 }
+const mapDispatchToProp = (dispatch) => ({
+  setUserEmail: (state) => dispatch(setEmail(state)),
+});
 
-export default Login;
+Login.propTypes = {
+  setUserEmail: PropTypes.string.isRequired,
+};
+
+export default connect(null, mapDispatchToProp)(Login);
