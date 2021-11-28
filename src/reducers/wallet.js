@@ -1,23 +1,19 @@
 // Esse reducer será responsável por tratar o todas as informações relacionadas as despesas
 
-import { CAMBIO, VALOR } from '../actions';
+import { RECEBER_API } from '../actions/fetch';
 
 const InitialState = {
-  valor: 0,
-  cambio: 'BRL',
+  currencies: {},
+  expenses: [],
+
 };
 
 const reducerValor = (state = InitialState, action) => {
   switch (action.type) {
-  case VALOR:
+  case RECEBER_API:
     return {
       ...state,
-      valor: action.payload,
-    };
-  case CAMBIO:
-    return {
-      ...state,
-      cambio: action.payload,
+      currencies: action.payload,
     };
 
   default:
