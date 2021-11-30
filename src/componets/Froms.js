@@ -2,56 +2,97 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { fetchAPI } from '../actions/fetch';
+import { setExpenses } from '../actions/index';
+import Descricao from '../ComponetesDoForms/Descricao';
+import ValorDasDespesas from '../ComponetesDoForms/ValorDasDespesas';
 
 class Forms extends React.Component {
-  constructor(){
-    super()
+  constructor() {
+    super();
     this.state = {
-      depesas:'',
-      descricao: '',
-      
-    }
+      id: 0,
+      value: '',
+      description: '',
+      method: 'Dinheiro',
+      tag: 'Alimentação',
+      currency: 'USD',
+    };
+    this.Digita = this.Digita.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
+
   async componentDidMount() {
     const { fetchUserAPI } = this.props;
     fetchUserAPI();
   }
 
+  Digita(event) {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  }
+
   moeda() {
     const { currencies } = this.props;
     return Object.keys(currencies).map((coins) => (
-      coins === 'USDT' ? false : (<option>{ coins }</option>)
+      coins === 'USDT' ? false : (
+        <option value={ coins }>{ coins }</option>
+      )
     ));
   }
 
+  handleClick() {
+    const { currencies, fetchUserAPI } = this.props;
+    const { id,
+      value,
+      description,
+      method,
+      tag,
+      currency,
+
+    } = this.state;
+    fetchUserAPI();
+    this.setState((estadoAnterior) => ({ id: estadoAnterior.id + 1 }));
+    this.setState({ value: 0 });
+    const { setUserForms } = this.props;
+    setUserForms({ id,
+      value,
+      description,
+      method,
+      tag,
+      currency,
+      exchangeRates: currencies });
+  }
+
   render() {
+    const { value, description } = this.state;
     return (
       <forms>
-        <input placeholder="valor da despesa" data-testid="value-input" type="text" />
-        <input
-          placeholder="descrição da despesa"
-          data-testid="description-input"
-          type="text"
-        />
+        <ValorDasDespesas change={ this.Digita } valor={ value } />
+        <Descricao change={ this.Digita } valor={ description } />
         <label htmlFor="moeda">
           MOEDA:
-          <select id="moeda" data-testid="currency-input">
+          <select
+            name="currency"
+            onChange={ this.Digita }
+            id="moeda"
+            data-testid="currency-input"
+          >
             {this.moeda()}
           </select>
         </label>
-        <select>
-          <option data-testid="method-input">Dinheiro</option>
-          <option>Cartão de crédito</option>
-          <option>Cartão de débito</option>
+        <select onChange={ this.Digita } name="method" data-testid="method-input">
+          <option value="Dinheiro">Dinheiro</option>
+          <option value="Cartão de crédito">Cartão de crédito</option>
+          <option value="Cartão de débito">Cartão de débito</option>
         </select>
-        <select data-testid="tag-input">
-          <option>Alimentação</option>
-          <option>Lazer</option>
-          <option>Trabalho</option>
-          <option>Transporte</option>
-          <option>Saúde</option>
+        <select onChange={ this.Digita } name="tag" data-testid="tag-input">
+          <option value="Alimentação">Alimentação</option>
+          <option value="Lazer">Lazer</option>
+          <option value="Trabalho">Trabalho</option>
+          <option value="Transporte">Transporte</option>
+          <option value="Saúde">Saúde</option>
         </select>
-        <button type="submit">Adicionar despesa</button>
+        <button onClick={ this.handleClick } type="submit">Adicionar despesa</button>
       </forms>
     );
   }
@@ -63,11 +104,13 @@ const mapStateToProp = (state) => ({
 
 const mapDispatchToProp = (dispatch) => ({
   fetchUserAPI: () => dispatch(fetchAPI()),
+  setUserForms: (state) => dispatch(setExpenses(state)),
 });
 
-/* Forms.propTypes = {
-  currencies: PropTypes.string.isRequired,
-  fetchUserAPI: PropTypes.string.isRequired,
-}; */
+Forms.propTypes = {
+  currencies: PropTypes.shape(PropTypes.object).isRequired,
+  fetchUserAPI: PropTypes.func.isRequired,
+  setUserForms: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProp, mapDispatchToProp)(Forms);

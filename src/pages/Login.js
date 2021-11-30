@@ -25,7 +25,6 @@ class Login extends React.Component {
   }
 
   Redirecionar() {
-    setEmail();
     const { setUserEmail } = this.props;
     const { email } = this.state;
     setUserEmail(email);
@@ -84,7 +83,7 @@ const mapDispatchToProp = (dispatch) => ({
 });
 
 Login.propTypes = {
-  setUserEmail: PropTypes.string.isRequired,
+  setUserEmail: PropTypes.func.isRequired,
 };
 
 export default connect(null, mapDispatchToProp)(Login);
