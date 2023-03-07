@@ -1,13 +1,25 @@
-# :construction: README customizado em construção ! :construction:
-<!-- Olá, Tryber!
-Esse é apenas um arquivo inicial para o README do seu projeto no qual você pode customizar e reutilizar todas as vezes que for executar o trybe-publisher.
+# Project Trybewallet
 
-Para deixá-lo com a sua cara, basta alterar o seguinte arquivo da sua máquina: ~/.student-repo-publisher/custom/_NEW_README.md
+Nese projeto eu criei um site utilizando a biblioteca Redux com a aplicação React, conectando o Redux aos componentes React, criando store, reducers, actions, dispatchers e muito mais. 
 
-É essencial que você preencha esse documento por conta própria, ok?
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-:warning: IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
--->
+
+Este site é lista virtual de despesas na qual o usuario pode fazer o login com email e senha e pode: 
+
+- fazer o valor das despesa
+
+- a descrição dela
+
+- a moeda da despesa 
+
+- se a despesa é dinheiro ou cartão 
+
+
+- se a despesa é para:
+
+  - Alimentação
+  - Lazer
+  - Trabalho
+  - Trabalho
+  - Saúde
+  
+E por fim adiciona a despesa em sua lista, para conferir o site clique em _[Project Trybewallet](https://project-trybewallet.pages.dev/)_
